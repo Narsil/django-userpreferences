@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block head %}
+<link rel="stylesheet" type="text/css" href="{% url preferences.views.media "css/preferences.css" %}" />
+{% comment %}
+<script type="text/javascript" src=
+    "{% url preferences.views.media "js/jquery-1.4.2.min.js" %}"></script>
+<script type="text/javascript" src=
+    "{% url preferences.views.media "js/preferences.js" %}"></script>
+
+{% endcomment %}
+{% endblock %}
+
+{% block content %}
+
+<form id="preferences_form" action="." method="POST">
+    {% csrf_token %}
+    <div id="preferences">
+{% for app,prefs in preferences.items %}
+        <ul class="module">
+            <li class="first">{{ app.capitalize }}</li>
+            {% for pref,values in prefs.items %}
+            <li> 
+                {{ pref }} 
+                <select name="{{app}}{{ SEPARATOR }}{{pref}}">
+                    {% for val in values %}
+                    <option value="{{ val.1 }}" > {{ val.0 }} </option>
+                    {% endfor %}
+                </select>
+            </li>
+            {% endfor %}
+        </ul>
+{% endfor %}
+    </div>
+    <input type="submit" value="Enregistrer" />
+</form>
+{% endblock %}
