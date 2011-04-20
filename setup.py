@@ -14,6 +14,7 @@ METADATA = dict(
     long_description=open('README.rst').read(),
     url='http://github.com/Narsil/django-userpreferences',
     keywords='django preferences user settings profile',
+    requires =['django_picklefield (>=0.1.9)',],
     classifiers=[
         'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
