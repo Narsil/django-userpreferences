@@ -7,14 +7,23 @@ METADATA = dict(
     version='0.1',
     author='Nicolas Patry',
     author_email='nicolas.patry@centraliens.net',
+
     description="""Django application that allows you to easily store
     preferences for your users to choose from. Sending emails but want to let
     the user choose the frequency ? Do it by adding a preferences.py file in
     your email app.""",
     long_description=open('README.rst').read(),
+
     url='http://github.com/Narsil/django-userpreferences',
+    download_url='http://github.com/Narsil/django-userpreferences/downloads/',
+
+    include_package_data = True,
+
     keywords='django preferences user settings profile',
-    requires =['django_picklefield (>=0.1.9)',],
+
+    install_requires=['django_picklefield>=0.1.9',],
+    packages = find_packages(),
+
     classifiers=[
         'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
