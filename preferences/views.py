@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 import os
 import django.views.static
 import app_settings
-from django.http import Http404
+from django.http import Http404,HttpResponseRedirect
 
 @login_required
 def index(request):
@@ -37,3 +37,17 @@ def media(request, path):
     parent = os.path.abspath(os.path.dirname(__file__))
     root = os.path.join(parent, 'media')
     return django.views.static.serve(request, path, root)
+
+@login_required
+def change(request,app,pref,new_value):
+    return_url='/'
+    if request.method=='GET':
+        if request.GET.get('return_url'):
+            return_url=request.GET.get('return_url')
+    try:
+        request.user.preferences.preferences[app][pref]=new_value
+        request.user.preferences.save()
+    except:
+        pass
+    return HttpResponseRedirect(return_url)
+
