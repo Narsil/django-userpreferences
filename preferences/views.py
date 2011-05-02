@@ -44,10 +44,10 @@ def change(request,app,pref,new_value):
     if request.method=='GET':
         if request.GET.get('return_url'):
             return_url=request.GET.get('return_url')
-    try:
-        request.user.preferences.preferences[app][pref]=new_value
-        request.user.preferences.save()
-    except:
-        pass
+    preferences = request.user.preferences.preferences
+    if not preferences.has_key(app):
+        preferences[app]={pref:new_value}
+    request.user.preferences.preferences[app][pref]=new_value
+    request.user.preferences.save()
     return HttpResponseRedirect(return_url)
 
