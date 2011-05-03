@@ -40,7 +40,7 @@ def media(request, path):
 
 @login_required
 def change(request,app,pref,new_value):
-    return_url='/'
+    return_url=request.path
     if request.method=='GET':
         if request.GET.get('return_url'):
             return_url=request.GET.get('return_url')
