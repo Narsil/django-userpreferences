@@ -32,8 +32,9 @@ class UserPreferences(models.Model):
         user_prefs = self.preferences.get(app_label)
         if user_prefs:
             for key in user_prefs:
-                #1 because we want to take the key not the value
-                prefs[key]=user_prefs[key]
+                #If settings not in available values don't change default
+                if user_prefs[key] in map(lambda x:x[1],app_prefs.get(key)):
+                    prefs[key]=user_prefs[key]
         return prefs
 
     def all(self):

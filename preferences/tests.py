@@ -6,18 +6,67 @@ Replace these with more appropriate tests for your application.
 """
 
 from django.test import TestCase
+from preferences import models
+from django.contrib.auth.models import User
+from django.test.client import Client
 
-class SimpleTest(TestCase):
-    def test_basic_addition(self):
-        """
-        Tests that 1 + 1 always equals 2.
-        """
-        self.failUnlessEqual(1 + 1, 2)
+class PreferencesTest(TestCase):
+    def setUp(self):
+        self.u = User.objects.create_user('testuser', 'test@example.com', 'testpw')
+        models.PREFERENCES={
+                'test_app': {
+                    'pref_test':(
+                        ('default','default_value'),
+                        ('different','different_value')),
+                    'pref_test2':(
+                        ('default2','default_value2'),
+                        ('different2','different_value2')),
+                    }
+                }
+        self.u.preferences.preferences['test_app']={
+                'pref_test':'default_value',
+                'pref_test2':'default_value2',
+                }
 
-__test__ = {"doctest": """
-Another way to test that 1 + 1 is equal to 2.
+    def test_get_default_if_none(self):
+        self.u.preferences.preferences['test_app']={}
+        self.u.preferences.save()
+        test_settings=self.u.preferences.get('test_app')
+        self.assertEqual(test_settings,
+                {'pref_test':'default_value',
+                    'pref_test2':'default_value2'})
 
->>> 1 + 1 == 2
-True
-"""}
+    def test_get_default_if_wrong_in_db(self):
+        self.u.preferences.preferences['test_app']={'pref_test':'toto'}
+        self.u.preferences.save()
+        test_settings=self.u.preferences.get('test_app')
+        self.assertEqual(test_settings,
+                {'pref_test':'default_value',
+                    'pref_test2':'default_value2'})
 
+
+    def test_change_through_api(self):
+        self.u.preferences.preferences['test_app']={'pref_test':'different_value'}
+        self.u.preferences.save()
+        test_settings=self.u.preferences.get('test_app')
+        self.assertEqual(test_settings,
+                {'pref_test':'different_value',
+                    'pref_test2':'default_value2'})
+
+    def test_change_through_url(self):
+        c = Client()
+        c.login(username='testuser',password='testpw')
+        response=c.get(
+                '/preferences/change/test_app/pref_test/different_value/',
+                {'return_url':'/'})
+        self.assertEqual(response.status_code,302)
+        test_settings=self.u.preferences.get('test_app')
+        self.assertEqual(test_settings,
+                {'pref_test':'different_value',
+                    'pref_test2':'default_value2'})
+
+    def test_change_through_form(self):
+        pass
+
+    def tearDown(self):
+        pass
