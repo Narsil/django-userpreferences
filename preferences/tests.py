@@ -6,9 +6,10 @@ Replace these with more appropriate tests for your application.
 """
 
 from django.test import TestCase
-from preferences import models
+from preferences import models,test_urls
 from django.contrib.auth.models import User
 from django.test.client import Client
+from django.core.urlresolvers import reverse
 
 class PreferencesTest(TestCase):
     def setUp(self):
@@ -28,6 +29,7 @@ class PreferencesTest(TestCase):
                 'pref_test2':'default_value2',
                 }
 
+class PreferencesAPITest(PreferencesTest):
     def test_get_default_if_none(self):
         self.u.preferences.preferences['test_app']={}
         self.u.preferences.save()
@@ -53,12 +55,16 @@ class PreferencesTest(TestCase):
                 {'pref_test':'different_value',
                     'pref_test2':'default_value2'})
 
+
+class PreferencesUrlTest(PreferencesTest):
     def test_change_through_url(self):
+        url = reverse(
+                'preferences.views.change',
+                args=['test_app','pref_test','different_value'],
+        )
         c = Client()
         c.login(username='testuser',password='testpw')
-        response=c.get(
-                '/preferences/change/test_app/pref_test/different_value/',
-                {'return_url':'/'})
+        response=c.get( url, {'return_url':'/'} )
         self.assertEqual(response.status_code,302)
         test_settings=self.u.preferences.get('test_app')
         self.assertEqual(test_settings,
@@ -66,7 +72,10 @@ class PreferencesTest(TestCase):
                     'pref_test2':'default_value2'})
 
     def test_change_through_form(self):
-        pass
-
-    def tearDown(self):
-        pass
+        url = reverse(
+                'preferences.views.index',
+        )
+        c = Client()
+        c.login(username='testuser',password='testpw')
+        response=c.get( url )
+        self.assertEqual(response.status_code,200)

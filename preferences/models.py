@@ -33,8 +33,10 @@ class UserPreferences(models.Model):
         if user_prefs:
             for key in user_prefs:
                 #If settings not in available values don't change default
-                if user_prefs[key] in map(lambda x:x[1],app_prefs.get(key)):
-                    prefs[key]=user_prefs[key]
+                # if user settings contain old preferences
+                if app_prefs.has_key(key):
+                    if user_prefs[key] in map(lambda x:x[1],app_prefs.get(key)):
+                        prefs[key]=user_prefs[key]
         return prefs
 
     def all(self):
@@ -45,13 +47,15 @@ class UserPreferences(models.Model):
             if not user_prefs:
                 continue
             for pref,user_value in user_prefs.items():
-                possibilities = list(preferences[app_label][pref])
-                for index,item in enumerate(possibilities):
-                    if item[1] == user_value:
-                        user_item = possibilities.pop(index)
-                        possibilities.insert(0,user_item)
-                        break
-                preferences[app_label][pref]=tuple(possibilities)
+                if preferences[app_label].has_key(pref):
+                    #Happens if old info is left in user settings
+                    possibilities = list(preferences[app_label][pref])
+                    for index,item in enumerate(possibilities):
+                        if item[1] == user_value:
+                            user_item = possibilities.pop(index)
+                            possibilities.insert(0,user_item)
+                            break
+                    preferences[app_label][pref]=tuple(possibilities)
         return preferences
 
 

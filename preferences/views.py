@@ -5,6 +5,7 @@ import os
 import django.views.static
 import app_settings
 from django.http import Http404,HttpResponseRedirect
+from django.core.urlresolvers import reverse
 
 @login_required
 def index(request):
@@ -28,12 +29,20 @@ def index(request):
                 user_preferences[app][pref]=value
                 request.user.preferences.save()
     preferences=request.user.preferences.all()
+    #TODO if django version is older
+    STATIC_URL = reverse('preferences.views.media', args=[''])
     extra={
             'preferences':preferences ,
+            'STATIC_URL':STATIC_URL,
             "SEPARATOR": app_settings.SEPARATOR}
     return render_to_response('preferences.html',request,extra=extra)
 
 def media(request, path):
+    """
+    Serve media file directly.
+    Useful only for django pre 1.3 which does not use
+    django.collectstatict
+    """
     parent = os.path.abspath(os.path.dirname(__file__))
     root = os.path.join(parent, 'media')
     return django.views.static.serve(request, path, root)

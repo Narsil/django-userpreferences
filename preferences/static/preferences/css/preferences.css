@@ -1,0 +1,35 @@
+.grappelli_list, .clean_list {
+  border: 1px solid #EEEEEE;
+  border-radius: 5px;
+  width:400px;
+  margin-left:30px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  background: none repeat scroll 0 0 #EEEEEE;
+  border: 1px solid #BDBDBD; }
+  .grappelli_list .section{
+    background: #d6d6d6;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$first',endColorstr='$second');
+    background: -webkit-gradient(linear, left top, left bottom, from(#e3e3e3), to(#d6d6d6));
+    background: -moz-linear-gradient(top, #e3e3e3, #d6d6d6);
+    -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+    color: #444444; }
+    .grappelli_list .section a:hover {
+      color: #309BBF; }
+  .grappelli_list li {
+    text-color: #E0E0E0;
+    font-weight: bold;
+    list-style: none;
+    padding: 5px 10px; }
+  .grappelli_list .row {
+    color: #309BBF;
+    border-top: 1px solid #FFFFFF;
+    color: #309BBF; }
+    .grappelli_list .row a:hover {
+      color: #444444; }
+
+input{
+    margin-left:30px;
+}

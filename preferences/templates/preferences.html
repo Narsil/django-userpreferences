@@ -1,25 +1,17 @@
 {% extends 'base.html' %}
 {% block head %}
-<link rel="stylesheet" type="text/css" href="{% url preferences.views.media "css/preferences.css" %}" />
-{% comment %}
-<script type="text/javascript" src=
-    "{% url preferences.views.media "js/jquery-1.4.2.min.js" %}"></script>
-<script type="text/javascript" src=
-    "{% url preferences.views.media "js/preferences.js" %}"></script>
-
-{% endcomment %}
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}preferences/css/preferences.css" />
 {% endblock %}
 
 {% block content %}
-
 <form id="preferences_form" action="." method="POST">
     {% csrf_token %}
     <div id="preferences">
 {% for app,prefs in preferences.items %}
-        <ul class="module">
-            <li class="first">{{ app.capitalize }}</li>
+        <ul class="grappelli_list">
+            <li class="section">{{ app.capitalize }}</li>
             {% for pref,values in prefs.items %}
-            <li> 
+            <li class="row"> 
                 {{ pref }} 
                 <select name="{{app}}{{ SEPARATOR }}{{pref}}">
                     {% for val in values %}
