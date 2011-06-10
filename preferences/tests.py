@@ -6,7 +6,7 @@ Replace these with more appropriate tests for your application.
 """
 
 from django.test import TestCase
-from preferences import models,test_urls
+from preferences import models
 from django.contrib.auth.models import User
 from django.test.client import Client
 from django.core.urlresolvers import reverse
