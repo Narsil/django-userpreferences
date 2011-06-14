@@ -67,12 +67,14 @@ That looks like this::
         )
     )
 
-You can now access user preference within your views::
+You can now access user preference within your views
+Using the `get` method differs from accessing directly the dict because it will return saved values 
+AND defaults if the database lacks them. You can always access directly the dict `user.preferences.preferences`::
 
     >>> user.preferences.get('test_app')
     {'mailing_period' : 'week'}
 
-    >>> user.preferences['test_app'] = { 'mailing_period' : 'month' }
+    >>> user.preferences.preferences['test_app'] = { 'mailing_period' : 'month' }
     >>> user.preferences.save()
     >>> user.preferences.get('test_app')
     {'mailing_period' : 'month'}
