@@ -56,6 +56,14 @@ class PreferencesAPITest(PreferencesTest):
                     'pref_test2':'default_value2'})
 
 
+    def test_change_through_dict_api(self):
+        self.u.preferences['test_app']={'pref_test':'different_value'}
+        self.u.preferences.save()
+        test_settings=self.u.preferences['test_app']
+        self.assertEqual(test_settings,
+                {'pref_test':'different_value',
+                    'pref_test2':'default_value2'})
+
 class PreferencesUrlTest(PreferencesTest):
     def test_change_through_url(self):
         url = reverse(

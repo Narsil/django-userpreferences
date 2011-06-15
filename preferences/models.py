@@ -20,6 +20,12 @@ class UserPreferences(models.Model):
             null=True)
     preferences = PickledObjectField(default={})
 
+    def __setitem__(self,key,item):
+        self.preferences[key] = item
+
+    def __getitem__(self,key):
+        return self.get(key)
+
     def get(self,app_label):
         app_prefs = PREFERENCES.get(app_label)
         prefs={}

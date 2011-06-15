@@ -1,6 +1,7 @@
-from utils import render_to_response
 from models import PREFERENCES
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import render_to_response
+from django.template import RequestContext
 import os
 import django.views.static
 import app_settings
@@ -35,7 +36,10 @@ def index(request):
             'preferences':preferences ,
             'STATIC_URL':STATIC_URL,
             "SEPARATOR": app_settings.SEPARATOR}
-    return render_to_response('preferences.html',request,extra=extra)
+    return render_to_response(
+            'preferences.html',
+            extra,
+            context_instance=RequestContext(request))
 
 def media(request, path):
     """
