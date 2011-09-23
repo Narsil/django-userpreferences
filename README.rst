@@ -58,7 +58,7 @@ Add a *preferences.py* file to you app *test_app*.::
 
 That looks like this::
 
-    PREFRENCES = (
+    PREFERENCES = (
         'mailing_period':(
             #(u'Preference Display', 'value')
             (u'Weekly', 'week'), #first item is the default value
